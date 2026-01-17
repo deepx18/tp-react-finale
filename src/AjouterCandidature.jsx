@@ -1,47 +1,37 @@
-import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { accepter, refuse, supprimer } from './redux/condidatureSlice'
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { ajouter } from './redux/condidatureSlice'
 
 function AjouterCandidature() {
-  const candidats = useSelector((state) => state.condidature)
+  const [candidat, setCandidat] = useState("")
+  const [poste, setPoste] = useState("")
+  const [departement, setDepartement] = useState("")
+  const [contrat, setContrat] = useState("")
   const dispatch = useDispatch()
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    dispatch(ajouter({
+      id: Date.now(),
+      candidat,
+      poste,
+      departement,
+      contrat,
+      statut: "en attente"
+    }))
+  }
 
   return (
     <>
       <div>AjouterCandidature</div>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>Candidat</th>
-            <th>Poste</th>
-            <th>Département</th>
-            <th>Contrat</th>
-            <th>Statut</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            candidats.map((c) => (
-              <tr>
-                <td>{c.candidat}</td>
-                <td>{c.poste}</td>
-                <td>{c.departement}</td>
-                <td>{c.contrat}</td>
-                <td>{c.statut}</td>
-                <td>
-                  <button onClick={() => dispatch(accepter(c.id))}>Accepter</button>
-                  <button onClick={() => dispatch(refuse(c.id))}>Refusée</button>
-                  {(c.statut === "en attente") && <button onClick={() => dispatch(supprimer(c.id))}>Supprimer</button>}
-                </td>
-              </tr>
-            ))
-          }
-        </tbody>
-
-      </table>
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={candidat} onChange={(e) => setCandidat(e.target.value)}  />
+        <input type="text" value={poste} onChange={(e) => setPoste(e.target.value)}  />
+        <input type="text" value={departement} onChange={(e) => setDepartement(e.target.value)}  />
+        <input type="text" value={contrat} onChange={(e) => setContrat(e.target.value)}  />
+        <input type="submit" value="Ajouter" />
+      </form>
     </>
-
   )
 }
 

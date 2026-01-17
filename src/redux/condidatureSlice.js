@@ -16,7 +16,8 @@ const condidatureSlice = createSlice({
   initialState,
   reducers: {
     ajouter: (state, payload) => {
-      state.push(payload)
+      console.log(payload.payload.id)
+      state.push(payload.payload)
     },
     supprimer: (state, payload) => {
       return state.filter((s) => s.id !== payload.payload )
